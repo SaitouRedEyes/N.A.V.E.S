@@ -11,7 +11,7 @@ public class Projectil : MonoBehaviour
     public string ShipTag
     {
         get { return shipTag; }
-        set { shipTag = value; }
+        set { shipTag = value; SetupSprite(); }
     }
 
     void Start()
@@ -28,6 +28,20 @@ public class Projectil : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if (!shipTag.Equals(other.gameObject.tag)) DestroyObject(this.gameObject);
+    }
+
+    /// <summary>
+    /// Setup the sprite of the shot.
+    /// </summary>
+    private void SetupSprite()
+    {
+        switch (shipTag)
+        {
+            case "YellowShip": this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Shots/shoot_yellow"); break;
+            case "BlueShip": this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Shots/shoot_blue"); break;
+            case "WhiteShip": this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Shots/shoot_white"); break;
+            case "RedShip": this.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Shots/shoot_red"); break;
+        }
     }
     
     /// <summary>

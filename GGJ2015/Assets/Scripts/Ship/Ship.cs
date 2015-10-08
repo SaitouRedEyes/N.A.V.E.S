@@ -38,22 +38,7 @@ public class Ship : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (!other.gameObject.tag.Equals("Untagged") && other.gameObject.tag.Substring(other.gameObject.tag.Length - 4).Equals("Shot"))
-        {
-            string shipTag = other.gameObject.tag.Remove(other.gameObject.tag.Length - 4);
-
-            if (!shipTag.Equals(this.tag))
-            {
-                Ship currShip = GameObject.FindGameObjectWithTag(shipTag).GetComponent<Ship>();
-                currShip.Score += 1;
-
-                if (currShip.Score >= 3)
-                {
-                    GameController.winner = shipTag;
-                    Application.LoadLevel((int)GameController.Scenes.End);
-                }
-            }
-        }
+        if (other.gameObject.GetComponent<Projectil>()) DamageResult(other);
         else if (other.gameObject.tag.Equals("AsteroidsBelt")) StartCoroutine(KnockBack());
     }
 
@@ -72,7 +57,7 @@ public class Ship : MonoBehaviour
     }
 
     /// <summary>
-    /// Ship Shooting and reloading (CoolDown).
+    /// Ship shooting and reloading (CoolDown).
     /// </summary>
     /// <returns></returns>
     private IEnumerator Shooting()
@@ -82,8 +67,8 @@ public class Ship : MonoBehaviour
                                                                    spawnPoint.transform.position.y,
                                                                    spawnPoint.transform.position.z),
                                                                    Quaternion.identity);
-        obj.tag = this.tag + "Shot";
-
+        obj.GetComponent<Projectil>().ShipTag = this.tag;
+        
         //Fire rate (Cooldown).
         SetSprite(shipReloading, false);
         yield return new WaitForSeconds(1);
@@ -129,6 +114,12 @@ public class Ship : MonoBehaviour
                 MoveShip(0, speed, 0.0f);
     }
 
+    /// <summary>
+    /// Move and rotate the ship in function of the player input.
+    /// </summary>
+    /// <param name="speedX"> speed on X-axis </param>
+    /// <param name="speedY"> speed on Y-axis </param>
+    /// <param name="rotationAngle"> the angle of the ship </param>
     private void MoveShip(float speedX, float speedY, float rotationAngle)
     {
         this.transform.localPosition = new Vector3(this.transform.localPosition.x + speedX,
@@ -140,6 +131,31 @@ public class Ship : MonoBehaviour
                                                         rotationAngle);
     }
 
+    /// <summary>
+    /// The result of the shot x ship collision.
+    /// </summary>
+    /// <param name="other"> the shot </param>
+    private void DamageResult(Collision2D other)
+    {
+        string shooterShipTag = other.gameObject.GetComponent<Projectil>().ShipTag;
+        
+        if (!shooterShipTag.Equals(this.tag))
+        {
+            Ship currShip = GameObject.FindGameObjectWithTag(shooterShipTag).GetComponent<Ship>();
+            currShip.Score += 1;
+
+            if (currShip.Score >= 3)
+            {
+                PlayerPrefs.SetString("Winner", shooterShipTag);
+                Application.LoadLevel((int)GameController.Scenes.End);
+            }
+        }
+    }
+
+    /// <summary>
+    /// If the player collides with asteroids belt, stun and knock back.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator KnockBack()
     {
         dizzy = true;
@@ -148,7 +164,7 @@ public class Ship : MonoBehaviour
 
         if (score > 0) score--;
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         dizzy = false;
         myRigidbody.freezeRotation = true;

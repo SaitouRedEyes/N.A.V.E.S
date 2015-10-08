@@ -4,17 +4,20 @@ using System.Collections.Generic;
 
 public class ShipBase : MonoBehaviour
 {
+    public Ship ship;
+
     private List<Sprite> sprites;
-    public GameObject ship;
+    private SpriteRenderer sr;
 
     void Start()
     {
+        sr = gameObject.GetComponent<SpriteRenderer>(); 
         SetupSprites();
     }
 
     void Update()
     {
-        SetSprite(ship.GetComponent<Ship>().Score);
+        SetSprite(ship.Score);
     }
 
     private void SetupSprites()
@@ -30,14 +33,11 @@ public class ShipBase : MonoBehaviour
             case "RedShip": color = "vermelha"; break;
         }
 
-        for (int i = 0; i < 4; i++)
-        {
-            sprites.Add((Sprite)Resources.Load("Sprites/base-" + color + "-" + i.ToString(), typeof(Sprite)));
-        }
+        for (int i = 0; i < 4; i++) sprites.Add((Sprite)Resources.Load("Sprites/base-" + color + "-" + i.ToString(), typeof(Sprite)));
     }
 
     private void SetSprite(int damage)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = sprites[damage];
+        sr.sprite = sprites[damage];
     }
 }

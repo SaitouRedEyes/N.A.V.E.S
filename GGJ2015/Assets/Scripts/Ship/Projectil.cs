@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shot : MonoBehaviour
+public class Projectil : MonoBehaviour
 {
     private float speed;
     private Transform father;
     private Vector3 direction;
     private string shipTag;
 
+    public string ShipTag
+    {
+        get { return shipTag; }
+        set { shipTag = value; }
+    }
+
     void Start()
     {
         speed = 10.0f;
-        shipTag = this.tag.Remove(this.tag.Length - 4);
         direction = GameObject.FindGameObjectWithTag(shipTag).transform.up;
     }
 
@@ -22,9 +27,12 @@ public class Shot : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(!this.tag.Remove(this.tag.Length - 4).Equals(other.gameObject.tag)) DestroyObject(this.gameObject);
+        if (!shipTag.Equals(other.gameObject.tag)) DestroyObject(this.gameObject);
     }
-
+    
+    /// <summary>
+    /// Shot move.
+    /// </summary>
     private void Move()
     {
         this.transform.Translate(direction * Time.deltaTime * speed);

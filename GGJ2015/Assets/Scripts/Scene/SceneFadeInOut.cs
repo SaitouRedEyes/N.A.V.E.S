@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SceneFadeInOut : MonoBehaviour {
-
+public class SceneFadeInOut : MonoBehaviour 
+{
 	public float fadeSpeed = 1.5f;          
 	
-	
 	private bool sceneStarting = true;      
-	
-	
+		
 	void Awake ()
 	{
 		// Set the texture so that it is the the size of the screen and covers it.
@@ -57,7 +55,6 @@ public class SceneFadeInOut : MonoBehaviour {
 		
 		FadeToBlack();
 		
-		if(GetComponent<GUITexture>().color.a >= 0.95f)
-			Application.LoadLevel(scene);
+		if(GetComponent<GUITexture>().color.a >= 0.95f) Application.LoadLevel(scene);
 	}
 }

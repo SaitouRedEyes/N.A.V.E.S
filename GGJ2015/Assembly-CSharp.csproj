@@ -50,9 +50,9 @@
      <Compile Include="Assets\Scripts\Scene\Menu.cs" />
      <Compile Include="Assets\Scripts\Scene\SceneFadeInOut.cs" />
      <Compile Include="Assets\Scripts\Scene\StaticScreen.cs" />
+     <Compile Include="Assets\Scripts\Ship\Projectil.cs" />
      <Compile Include="Assets\Scripts\Ship\Ship.cs" />
      <Compile Include="Assets\Scripts\Ship\ShipBase.cs" />
-     <Compile Include="Assets\Scripts\Ship\Shot.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

@@ -6,14 +6,13 @@ public class GameController : MonoBehaviour
     private int itensNumber = 4;
     private float vertExtent, vertOffsetExtent, horzExtent, horzOffsetExtent;
     private GameObject powerPrefab;
+    private Sprite[] powers;
     private bool couldInstantiateItem;
 
     public enum Scenes
     {
         Menu = 0, Game = 1, End = 2
     }
-
-    public static string winner = string.Empty;
 
     void Start()
     {
@@ -23,15 +22,17 @@ public class GameController : MonoBehaviour
         vertOffsetExtent = 2.0f;
 
         powerPrefab = (GameObject)Resources.Load("Prefabs/Power");
+        powers = new Sprite[] { Resources.Load<Sprite>("Sprites/SpeedPlus"), 
+                                Resources.Load<Sprite>("Sprites/SpeedMinus"),
+                                Resources.Load<Sprite>("Sprites/AmmoPlus"),
+                                Resources.Load<Sprite>("Sprites/AmmoMinus")};
+
         couldInstantiateItem = true;
     }
     
     void Update()
     {
-        if (couldInstantiateItem)
-        {
-            StartCoroutine(InstantiateItem());
-        }
+        if (couldInstantiateItem) StartCoroutine(InstantiateItem());
     }
 
     private IEnumerator InstantiateItem()
@@ -48,14 +49,13 @@ public class GameController : MonoBehaviour
 
         switch (whatPower)
         {
-            case 0: power.tag = "SpeedPlus"; power.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/SpeedPlus"); break;
-            case 1: power.tag = "SpeedMinus"; power.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/SpeedMinus"); break;
-            case 2: power.tag = "AmmoPlus"; power.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/AmmoPlus"); break;
-            case 3: power.tag = "AmmoMinus"; power.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/AmmoMinus"); break;
+            case 0: power.tag = "SpeedPlus"; power.GetComponent<SpriteRenderer>().sprite = powers[0]; break;
+            case 1: power.tag = "SpeedMinus"; power.GetComponent<SpriteRenderer>().sprite = powers[1]; break;
+            case 2: power.tag = "AmmoPlus"; power.GetComponent<SpriteRenderer>().sprite = powers[2]; break;
+            case 3: power.tag = "AmmoMinus"; power.GetComponent<SpriteRenderer>().sprite = powers[3]; break;
         }
 
         StartCoroutine(DestroyItem(power));
-        couldInstantiateItem = true;
     }
 
     private IEnumerator DestroyItem(GameObject power)
@@ -63,5 +63,6 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         if (power != null) Destroy(power);
+        couldInstantiateItem = true;
     }
 }

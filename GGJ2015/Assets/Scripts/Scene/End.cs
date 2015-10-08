@@ -7,7 +7,7 @@ public class End : StaticScreen
 
     void Start()
     {
-        switch (GameController.winner)
+        switch (PlayerPrefs.GetString("Winner"))
         {
             case "YellowShip": background.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Sprites/win_amarelo", typeof(Sprite)); break;
             case "BlueShip": background.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Sprites/win_azul", typeof(Sprite)); break;

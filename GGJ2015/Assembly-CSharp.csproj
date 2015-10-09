@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\Power.cs" />
      <Compile Include="Assets\Scripts\Scene\End.cs" />
      <Compile Include="Assets\Scripts\Scene\Menu.cs" />
      <Compile Include="Assets\Scripts\Scene\SceneFadeInOut.cs" />

@@ -8,14 +8,14 @@ public class Ship : MonoBehaviour
 
     private int score;
     private float speed, axisSensibility;
-    private bool couldShot, dizzy;
+    private bool couldShot, shotPowerPlus, shotPowerMinus, dizzy;
     private GameObject shot;
     private Vector3 movementAxis;
     private Rigidbody2D myRigidbody;
     
     public int Score
     {
-        set { score = value; }
+        set { if (value == 1 || value == -1) score += value; }
         get { return score; }
     }
 
@@ -26,7 +26,7 @@ public class Ship : MonoBehaviour
         speed = 0.05f;
         axisSensibility = 0.4f;
         couldShot = true;
-        dizzy = false;
+        shotPowerPlus = shotPowerMinus = dizzy = false;
         myRigidbody = this.GetComponent<Rigidbody2D>();
     }
 
@@ -39,7 +39,8 @@ public class Ship : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.GetComponent<Projectil>()) DamageResult(other);
-        else if (other.gameObject.tag.Equals("AsteroidsBelt")) StartCoroutine(KnockBack());
+        else if (other.gameObject.CompareTag("AsteroidsBelt")) StartCoroutine(KnockBack());
+        else if (other.gameObject.CompareTag("Power")) PowerEffect(other);
     }
 
     /// <summary>
@@ -68,6 +69,17 @@ public class Ship : MonoBehaviour
                                                                    spawnPoint.transform.position.z),
                                                                    Quaternion.identity);
         obj.GetComponent<Projectil>().ShipTag = this.tag;
+
+        if (shotPowerPlus)
+        {
+            obj.transform.localScale = new Vector3(10, 10, obj.transform.localScale.z);
+            shotPowerPlus = false;
+        }
+        else if (shotPowerMinus)
+        {
+            obj.GetComponent<Projectil>().Speed = 5.0f;
+            shotPowerMinus = false;
+        }
         
         //Fire rate (Cooldown).
         SetSprite(shipReloading, false);
@@ -142,7 +154,7 @@ public class Ship : MonoBehaviour
         if (!shooterShipTag.Equals(this.tag))
         {
             Ship currShip = GameObject.FindGameObjectWithTag(shooterShipTag).GetComponent<Ship>();
-            currShip.Score += 1;
+            currShip.Score = 1;
 
             if (currShip.Score >= 3)
             {
@@ -170,4 +182,29 @@ public class Ship : MonoBehaviour
         myRigidbody.freezeRotation = true;
         myRigidbody.velocity = Vector3.zero;
     }
+
+
+    private void PowerEffect(Collision2D other)
+    {
+        Power power = other.gameObject.GetComponent<Power>();
+
+        Destroy(other.gameObject);
+
+        switch ((int)power.GetEffect)
+        {
+            case (int)Power.Effects.SpeedPlus: StartCoroutine(UpdateSpeed(other, 0.1f)); break;
+            case (int)Power.Effects.SpeedMinus: StartCoroutine(UpdateSpeed(other, 0.01f)); break;
+            case (int)Power.Effects.AmmoPlus: shotPowerPlus = true; break;
+            case (int)Power.Effects.AmmoMinus: shotPowerMinus = true; break;
+        }
+    }
+
+    private IEnumerator UpdateSpeed(Collision2D other, float newSpeed)
+    {
+        speed = newSpeed;
+        yield return new WaitForSeconds(3);
+        speed = 0.05f;
+    }
+
+   
 }

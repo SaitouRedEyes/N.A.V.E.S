@@ -3,10 +3,16 @@ using System.Collections;
 
 public class Projectil : MonoBehaviour
 {
-    private float speed;
+    private float speed = 10.0f;
     private Transform father;
     private Vector3 direction;
     private string shipTag;
+
+    public float Speed
+    {
+        get { return speed; }
+        set { if (value <= 5.0f) speed = value; }
+    }
 
     public string ShipTag
     {
@@ -16,7 +22,6 @@ public class Projectil : MonoBehaviour
 
     void Start()
     {
-        speed = 10.0f;
         direction = GameObject.FindGameObjectWithTag(shipTag).transform.up;
     }
 

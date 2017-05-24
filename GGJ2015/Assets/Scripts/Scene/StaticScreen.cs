@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public abstract class StaticScreen : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public abstract class StaticScreen : MonoBehaviour
 
     private void Change()
     {
-        switch (Application.loadedLevel)
+        switch (SceneManager.GetActiveScene().buildIndex)
         {
             case (int)GameController.Scenes.Menu: Application.LoadLevel((int)GameController.Scenes.Game); break;
             case (int)GameController.Scenes.End: Application.LoadLevel((int)GameController.Scenes.Menu); break;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SceneFadeInOut : MonoBehaviour 
 {
@@ -54,7 +55,7 @@ public class SceneFadeInOut : MonoBehaviour
 		GetComponent<GUITexture>().enabled = true;
 		
 		FadeToBlack();
-		
-		if(GetComponent<GUITexture>().color.a >= 0.95f) Application.LoadLevel(scene);
+
+        if (GetComponent<GUITexture>().color.a >= 0.95f) SceneManager.LoadScene(scene);//Application.LoadLevel(scene);
 	}
 }

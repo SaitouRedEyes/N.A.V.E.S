@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Ship : MonoBehaviour
 {
@@ -159,7 +160,8 @@ public class Ship : MonoBehaviour
             if (currShip.Score >= 3)
             {
                 PlayerPrefs.SetString("Winner", shooterShipTag);
-                Application.LoadLevel((int)GameController.Scenes.End);
+                //Application.LoadLevel((int)GameController.Scenes.End);
+                SceneManager.LoadScene((int)GameController.Scenes.End);
             }
         }
     }
